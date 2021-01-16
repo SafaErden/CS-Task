@@ -13,14 +13,17 @@ function ShipmentList() {
     }, [dispatch]);
 
     const { list, loading } = useSelector((state: {bidReducer: IShipmentState}) => state.bidReducer);
-    console.log(list);
     const renderList = list.map((item: IListItem) => {
-       return <Item info={item} />
+       return <Item info={item}/>
     })
   
     return (
-      <div className="bg-primary">
-        {renderList}
+      <div className="container">
+        <div className='row'>
+          <div className='col card-columns'>
+            {renderList}
+        </div>
+        </div>
       </div>
     );
   }
