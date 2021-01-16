@@ -12,7 +12,7 @@ function ShipmentList() {
         dispatch(fetchShipments(dispatch));
     }, [dispatch]);
 
-    const { list, loading } = useSelector((state: {bidReducer: IShipmentState}) => state.bidReducer);
+    const { list } = useSelector((state: {bidReducer: IShipmentState}) => state.bidReducer);
     
     const renderList = list.map((item: IListItem) => {
        return <Item info={item}/>
