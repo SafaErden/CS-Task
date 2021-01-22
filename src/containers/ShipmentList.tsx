@@ -9,7 +9,7 @@ function ShipmentList() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchShipments(dispatch));
+        dispatch(fetchShipments());
     }, [dispatch]);
 
     const { list } = useSelector((state: {bidReducer: IShipmentState}) => state.bidReducer);

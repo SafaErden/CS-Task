@@ -1,17 +1,36 @@
-import React from 'react';
+import React, {useEffect}  from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
 import { IBid } from '../store/actions/interfaces';
+import { fetchShipments, deleteBid } from '../store/actions';
 import { useSelector } from 'react-redux';
 import { IShipmentState } from '../store/reducers/bidReducer';
-import Bid from '../components/bid'
-import PlaceBid from '../components/placeBid'
+import Bid from '../components/bid';
+import PlaceBid from '../components/placeBid';
+import { IShipmentDetailProps } from './container';
 
-const ShipmentDetail = () => {
+const ShipmentDetail: React.FC<IShipmentDetailProps> = ({id}) => {
     const { list,  myBids } = useSelector((state: {bidReducer: IShipmentState}) => state.bidReducer);
     const params = useParams<{id: string}>();
+    
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        if(list !== null && list.length === 0){
+            dispatch(fetchShipments());
+        }   
+    }, []);
    
-    const info = list.find(item => item.id === params.id)
+    const info = list.find(item => item.id === params.id);
+    if(!info) {
+        return null;
+    }
     const bids = info.bids.data.map((bid: IBid) => <Bid bid = {bid} key = {bid.id}/>)
+
+    const handleDelete = () => {
+        dispatch(deleteBid(params.id));
+    }
+
     const myBid = myBids.map((bid: {
 		shipmentId: string,
 		amount: number
@@ -28,7 +47,7 @@ const ShipmentDetail = () => {
                         </div>
                         <div>
                         <div className='col-auto'>
-                            Update - Delete
+                            <button type="button" className="btn btn-dark" onClick={handleDelete}>Delete </button>
                         </div>
                         </div>
                     </div>
@@ -39,7 +58,10 @@ const ShipmentDetail = () => {
             return null;
         }
     });
-    console.log(myBid.length)
+
+    let filtered = myBid.filter((bid) => {
+        return bid != null;
+      });
     return(
         <>
             <div className="card">
@@ -57,7 +79,7 @@ const ShipmentDetail = () => {
                     <small className="text-muted">Distance: {info.mileage}</small>
                 </div>
             </div>
-                <PlaceBid isDisabled={myBids.length > 0}/>
+                <PlaceBid isDisabled={filtered.length > 0}/>
             <div>
                 {myBid}
                 {bids}

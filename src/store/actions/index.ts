@@ -38,7 +38,8 @@ export interface IUpdateBid {
     payload: {id: string, amount: number};
 }
 
-export const fetchShipments = (dispatch: Dispatch) => async (dispatch: Dispatch) => {
+
+export const fetchShipments: () => (dispatch: Dispatch) => Promise<void> = () => async (dispatch: Dispatch) => {
     try {
         const response = await api.get("/");
         if (response.data) {
@@ -58,7 +59,7 @@ export const placeBid = (id: string, amount: number) => {
   }
 };
 
-export const deleteBid = (id: string) => {
+export const deleteBid = (id: string): IDeleteBid => {
   return {
     type: SHIPMENT_ACTION_TYPES.DELETE_BID,
     payload: id
